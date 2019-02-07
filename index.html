@@ -1,3 +1,65 @@
-<!DOCTYPE html><html><head><meta name="generator" content="Hexo 3.8.0"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="ie=edge"><title>Hexo | Hexo</title><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"><script src="/js/third-party/jquery.min.js">           </script><script src="/js/third-party/velocity.min.js">           </script><script src="/js/third-party/velocity.ui.min.js">           </script><link rel="icon" href="/temple002.github.io/img/favicon.ico"></head><body><nav id="nav-bar"><nav class="clear-fix" id="nav-container"><div class="pull-left" id="page-home"><a href="/temple002.github.io/">Hexo</a></div><i class="fa fa-bars pull-right" id="toggle-nav" aria-hidden="true"></i><ul class="pull-right" id="navs"><li><a class="nav" href="/temple002.github.io/">Home</a></li><li><a class="nav" href="/temple002.github.io/about">About</a></li><li><a class="nav" href="/temple002.github.io/tags">Tags</a></li></ul></nav></nav><header id="header-info"><div id="header-container"><div id="site-info"><div id="terminal-pl"><div id="top-bar"><ul id="control"><li class="btn"></li><li class="btn"></li><li class="btn"></li></ul><div id="file-path"><i class="fa fa-folder folder-ic" aria-hidden="true"></i> John Doe 10 X 10</div></div><div id="code-pl">Last updated: 2019-02-07<br>John Doe:~ Desktop$ <span class="code-pl-input">node home.js</span><br><br>> Blog.purpose<br><span class="answer">Sharing something interesting in my limited life.</span><br><br>> Blog.author<br><span class="answer">LazySheep</span><br><br>> Blog.more<br><a href="https://github.com/lazysheep666/lazysheep666.github.io" target="_blank"><span class="answer">check here</span></a></div></div></div></div></header><div id="content-outer"><div id="content-inner"><div class="recent-post-item"><a class="article-title" href="/temple002.github.io/2019/02/07/iOS关于动态执行方法的探索/">iOS关于动态执行方法的探索</a><time class="article-date"><i class="fa fa-calendar" aria-hidden="true"></i> 2019-02-07</time><div class="article-inner"><h3 id="我为什么会写这篇文章"><a href="#我为什么会写这篇文章" class="headerlink" title="我为什么会写这篇文章"></a>我为什么会写这篇文章</h3><blockquote>
+<!DOCTYPE html><html><head><meta name="generator" content="Hexo 3.8.0"><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>Hexo</title><meta name="description" content="wwwuxt.cc"><meta name="google-site-verification" content="E8VUvVH5vDhYzozsHCnyTf31z8dllC9fXQrHn0GK6VU"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/atom.xml" title="Hexo"><link rel="stylesheet" href="/css/font-awesome.min.css"></head><body><div class="wrap"><header><h1 class="branding"><a href="/" title="Hexo"><img class="logo-image" src="/favicon.ico" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><!--a.nav-list-link(class={active: act} href=url_for(value), target=tar)--><a class="nav-list-link" href="/" target="_self">首页</a></li><li class="nav-list-item"><!--a.nav-list-link(class={active: act} href=url_for(value), target=tar)--><a class="nav-list-link" href="/archives" target="_self">归档</a></li><li class="nav-list-item"><!--a.nav-list-link(class={active: act} href=url_for(value), target=tar)--><a class="nav-list-link" href="/tags" target="_self">标签</a></li><li class="nav-list-item"><!--a.nav-list-link(class={active: act} href=url_for(value), target=tar)--><a class="nav-list-link" href="/about" target="_self">关于</a></li></ul></header><main class="container"><ul class="home post-list"><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a class="post-title-link" href="/2019/02/07/iOS关于动态执行方法的探索/">iOS关于动态执行方法的探索</a></h2><p class="post-info"><i class="fa fa-calendar">&nbsp;</i>2019-02-07&nbsp;| <i class="fa fa-tags">&nbsp;</i><a class="post-category-link" href="https://github.com/wwwuxt">coder</a>&nbsp;| <i class="fa fa-folder-o">&nbsp;</i><a class="post-category-link" href="http://wwwuxt.cc">Full Stand developer</a></p><div class="post-content"><h3 id="我为什么会写这篇文章"><a href="#我为什么会写这篇文章" class="headerlink" title="我为什么会写这篇文章"></a>我为什么会写这篇文章</h3><blockquote>
 <p>今天在写Bugly上报错误的时候遇到了一个问题，由于项目使用组件化开发思想，在上报错误组件里需要知道当前是否导入了Bugly组件，如果没有Bugly组件，则不进行Bugly上报，我第一个想到了用<code>NSClassFromString</code>来判断是否存在Bugly，如果存在，再使用<code>performSelector:withObject</code>在<code>runtime</code>调用Bugly上报方法，但是Bugly输出日志的方法<code>BuglyLog level:&lt;#(BuglyLogLevel)#&gt; log:&lt;#(NSString *), ...#&gt;</code>第一个参数需要传入<code>NSUInterger</code>类型的基本数据，但是<code>performSelector:withObject</code>方法只能传入OC对象，所以我在解决问题的同时顺带研究了一下OC执行方法，消息传递的几种常见方法。</p>
-</blockquote></div><div class="article-footer"><a class="article-more" href="/temple002.github.io/2019/02/07/iOS关于动态执行方法的探索/#more">more>></a><div class="article-tags"><i class="fa fa-tag" aria-hidden="true"></i></div></div></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span></div></nav></div></div><footer><div id="footer-inner"><div class="social-icons"></div><p class="design-info">power by <a href="https://hexo.io" target="_blank">Hexo</a> | theme <a href="https://github.com/lazysheep666/terminal_theme" target="_blank">Teminal</a></p><p class="copyright">Copyright © John Doe Blog 2019</p></div></footer><script src="/js/nav.js"></script><script src="/js/scroll.js"></script><script src="/js/index.js"></script></body></html>
+</blockquote></div><a class="read-more" href="/2019/02/07/iOS关于动态执行方法的探索/">&hellip; read more</a></article></li></ul></main><footer><div class="paginator"></div><div class="clearfix"></div><div class="copyright"><p id="host_by"> <a href="/atom.xml"><i class="fa fa-rss"></i></a><span id="busuanzi_container_site_pv">&nbsp;<i class="fa fa-eye">&nbsp;</i><span id="busuanzi_value_site_pv"><i class="fa fa-spinner"></i></span> times, </span><span id="busanzi_container_site_uv">&nbsp;<i class="fa fa-user">&nbsp;</i><span id="busuanzi_value_site_uv"><i class="fa fa-spinner"></i></span> times.</span><br> &copy; 2017 - 2019 <a href="http://wwwuxt.cc">wwwuxt</a>. 
+ Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/wwwuxt/hexo-theme-artemisX" target="_blank">ArtemisX</a>.<br></p><script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></footer></div><script>var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-108353521-1']);
+_gaq.push(['_trackPageview']);
+
+(function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+console.log('Google Analytics')
+</script><script>(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https'){
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else{
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+    console.log('wwwuxt.cc')
+})();
+</script><script>(function(){
+    var req = GetXmlHttpObject()  
+    if (req == null) {  
+        console.log("not support AJAX!");  
+        return;  
+    }
+    req.onreadystatechange = function() {  
+        if (req.readyState === 4 && req.status === 200) {  
+            var deploy_server = req.getResponseHeader("Server");
+            console.log(deploy_server)
+            if(deploy_server === 'Coding Pages'){
+                document.getElementById('host_by').innerHTML+='Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a>.'
+            }
+            else if(deploy_server === 'GitHub.com'){
+                document.getElementById('host_by').innerHTML+='Hosted by <a href="https://pages.github.com" style="font-weight: bold">GitHub Pages</a>.'
+            }
+            else{
+                document.getElementById('host_by').innerHTML+='Hosted by <a href="#" style="font-weight: bold">'+ deploy_server + '</a>.'
+            }
+        }  
+    };  
+    req.open('GET', document.location, true);
+    req.send(null);
+})();
+function GetXmlHttpObject() {  
+    var xmlHttp = null;  
+    try {  
+        // Firefox, Opera 8.0+, Safari  
+        xmlHttp = new XMLHttpRequest();  
+    } catch (e) {  
+        // Internet Explorer  
+        try {  
+            xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");  
+        } catch (e) {  
+            xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");  
+        }  
+    }  
+    return xmlHttp;  
+}  </script></body></html>
