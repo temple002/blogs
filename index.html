@@ -1,1 +1,354 @@
-<!DOCTYPE html><html><head><meta name="generator" content="Hexo 3.8.0"><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> Hexo</title><meta name="description" content="A Blog Powered By Hexo"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://yoursite.com/atom.xml" title="Hexo"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link active">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="http://weibo.com/sunchongsheng" target="_blank" class="nav-list-link">WEIBO</a></li><li class="nav-list-item"><a href="https://github.com/pinggod" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><ul class="home post-list"><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/2019/02/07/iOS关于动态执行方法的探索/" class="post-title-link">iOS关于动态执行方法的探索</a></h2><div class="post-info">Feb 7, 2019</div><div class="post-content"></div><a href="/2019/02/07/iOS关于动态执行方法的探索/" class="read-more">...more</a></article></li></ul></main><footer><div class="paginator"></div><div class="copyright"><p>© 2015 - 2019 <a href="http://yoursite.com">John Doe</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>
+
+<!DOCTYPE html>
+<html lang="">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Hexo">
+    <title>Hexo</title>
+    <meta name="author" content="John Doe">
+    
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"Website","@id":"http://yoursite.com","author":{"@type":"Person","name":"John Doe","sameAs":["https://github.com/","http://stackoverflow.com/users","https://twitter.com/","https://facebook.com/","https://plus.google.com/","https://www.linkedin.com/profile/","mailto"]},"name":"Hexo","description":null,"url":"http://yoursite.com"}</script>
+    <meta property="og:type" content="blog">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://yoursite.com/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:locale" content="default">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo">
+    
+    
+        
+    
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/all.css">
+    <link rel="stylesheet" href="/assets/css/jquery.fancybox.css">
+    <link rel="stylesheet" href="/assets/css/thumbs.css">
+    <link rel="stylesheet" href="/assets/css/tranquilpeak.css">
+    <!--STYLES END-->
+    
+
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+
+<header id="header" data-behavior="1">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">Hexo</a>
+    </div>
+    
+        
+            <a class="header-right-picture " href="#about">
+        
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+<nav id="sidebar" data-behavior="1">
+    <div class="sidebar-container">
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/ " title="Home">
+                    
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-categories" title="Kategorien">
+                    
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Kategorien</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-tags" title="Tags">
+                    
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-archives" title="Archiv">
+                    
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archiv</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link open-algolia-search" href="#search" title="Suche">
+                    
+                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Suche</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="#about" title="Über">
+                    
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Über</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="https://github.com/" target="_blank" rel="noopener" title="GitHub">
+                    
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="http://stackoverflow.com/users" target="_blank" rel="noopener" title="Stack Overflow">
+                    
+                        <i class="sidebar-button-icon fab fa-stack-overflow" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Stack Overflow</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="https://twitter.com/" target="_blank" rel="noopener" title="Twitter">
+                    
+                        <i class="sidebar-button-icon fab fa-twitter" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Twitter</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="https://facebook.com/" target="_blank" rel="noopener" title="Facebook">
+                    
+                        <i class="sidebar-button-icon fab fa-facebook" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Facebook</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="https://plus.google.com/" target="_blank" rel="noopener" title="Google Plus">
+                    
+                        <i class="sidebar-button-icon fab fa-google-plus" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Google Plus</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="https://www.linkedin.com/profile/" target="_blank" rel="noopener" title="LinkedIn">
+                    
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/mailto" title="E-Mail">
+                    
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">E-Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/atom.xml" title="RSS">
+                    
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="1"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                <section class="postShorten-group main-content-wrap">
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a class="link-unstyled" href="/2019/02/07/iOS关于动态执行方法的探索/">
+                            iOS关于动态执行方法的探索
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2019-02-07T14:05:11+08:00">
+	
+		    07 Feb 2019
+    	
+    </time>
+    
+</div>
+
+            </div>
+            
+                <div class="postShorten-content">
+                    <h1 id="我为什么会写这篇文章"><a href="#我为什么会写这篇文章" class="headerlink" title="我为什么会写这篇文章"></a>我为什么会写这篇文章</h1><blockquote>
+<p>今天在写Bugly上报错误的时候遇到了一个问题，由于项目使用组件化开发思想，在上报错误组件里需要知道当前是否导入了Bugly组件，如果没有Bugly组件，则不进行Bugly上报，我第一个想到了用<code>NSClassFromString</code>来判断是否存在Bugly，如果存在，再使用<code>performSelector:withObject</code>在<code>runtime</code>调用Bugly上报方法，但是Bugly输出日志的方法<code>BuglyLog level:&lt;#(BuglyLogLevel)#&gt; log:&lt;#(NSString *), ...#&gt;</code>第一个参数需要传入<code>NSUInterger</code>类型的基本数据，但是<code>performSelector:withObject</code>方法只能传入OC对象，所以我在解决问题的同时顺带研究了一下OC执行方法，消息传递的几种常见方法。</p>
+</blockquote>
+<h1 id="第一种方式"><a href="#第一种方式" class="headerlink" title="第一种方式"></a>第一种方式</h1><h4 id="performSelector方式"><a href="#performSelector方式" class="headerlink" title="performSelector方式"></a>performSelector方式</h4><p>这应该是开发过程中动态执行方法最常用的方式了吧，最常见的用法就是<code>performSelector:withObject</code>，或者可以再带一个参数<code>performSelector:withObject:withObject:</code>，就像这样调用:</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">id</span> BuglyClass = (<span class="keyword">id</span>)<span class="built_in">NSClassFromString</span>(<span class="string">@"Bugly"</span>);</span><br><span class="line"><span class="built_in">NSError</span> *error = [<span class="built_in">NSError</span> errorWithDomain:errorTitle code:<span class="number">-1</span> userInfo:@&#123;<span class="built_in">NSLocalizedDescriptionKey</span>:<span class="string">@""</span>&#125;];</span><br><span class="line">[BuglyClass performSelector:<span class="keyword">@selector</span>(reportError:) withObject:error];</span><br></pre></td></tr></table></figure>
+<p>也有延时触发的用法</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">performSelector:withObject:afterDelay:</span><br></pre></td></tr></table></figure>
+<p>在某个线程中执行的用法，当然这些不是本文讨论的重点，所以一笔带过</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)performSelectorInBackground:(SEL)aSelector withObject:(<span class="keyword">id</span>)arg</span><br><span class="line">- (<span class="keyword">void</span>)performSelectorOnMainThread:(SEL)aSelector withObject:(<span class="keyword">id</span>)arg waitUntilDone:(<span class="built_in">BOOL</span>)wait modes:(<span class="built_in">NSArray</span> *)array;</span><br><span class="line">- (<span class="keyword">void</span>)performSelector:(SEL)aSelector onThread:(<span class="built_in">NSThread</span> *)thr withObject:(<span class="keyword">id</span>)arg waitUntilDone:(<span class="built_in">BOOL</span>)wait modes:(<span class="built_in">NSArray</span> *)array;</span><br></pre></td></tr></table></figure>
+<h5 id="其实不难发现performSelector方式有一些弊端"><a href="#其实不难发现performSelector方式有一些弊端" class="headerlink" title="其实不难发现performSelector方式有一些弊端"></a>其实不难发现performSelector方式有一些弊端</h5><blockquote>
+<p>   1.不能传超过三个参数<br>   2.参数只能为OC对象</p>
+</blockquote>
+<h1 id="第二种方式"><a href="#第二种方式" class="headerlink" title="第二种方式"></a>第二种方式</h1><h4 id="NSInvocation方式"><a href="#NSInvocation方式" class="headerlink" title="NSInvocation方式"></a>NSInvocation方式</h4><p>先不说啥，直接上代码</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSString</span> *string = <span class="string">@"test"</span>;</span><br><span class="line"><span class="built_in">NSNumber</span> *number = [<span class="built_in">NSNumber</span> numberWithInt:<span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">SEL selector = <span class="keyword">@selector</span>(function2:count:);</span><br><span class="line"><span class="built_in">NSMethodSignature</span> *signature = [<span class="keyword">self</span> methodSignatureForSelector:selector];</span><br><span class="line"><span class="built_in">NSInvocation</span> *invocation = [<span class="built_in">NSInvocation</span> invocationWithMethodSignature:signature];</span><br><span class="line"></span><br><span class="line">invocation.target = <span class="keyword">self</span>;</span><br><span class="line">invocation.selector = selector;</span><br><span class="line"><span class="comment">// 第一和第二个参数是target和selector</span></span><br><span class="line">[invocation setArgument:&amp;string atIndex:<span class="number">2</span>];</span><br><span class="line">[invocation setArgument:&amp;number atIndex:<span class="number">3</span>];</span><br><span class="line"><span class="comment">//执行</span></span><br><span class="line">[invocation invoke];</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>NSMethodSignature</code>: 方法签名，如果方法不存在或者参数对不上，会直接crach，其实我也不是很理解这个签名的意思，可能是代码写得不够多吧，按照我的理解，这个数字签名就像是找一下这个target里面是否有这个方法，参数是否正确，如果都对，则签名生效，否则就可能奔溃</p>
+</blockquote>
+<blockquote>
+<p><code>NSInvocation</code>: 包装了一次消息传递的所有内容，包括target，select，argument等等，会在运行时找到目标发送消息</p>
+</blockquote>
+<blockquote>
+<p>注意这里传的参数是地址，所以还不不满足我们的需求</p>
+</blockquote>
+<h4 id="为了解决今天上报Bugly的问题，我还得继续探索"><a href="#为了解决今天上报Bugly的问题，我还得继续探索" class="headerlink" title="为了解决今天上报Bugly的问题，我还得继续探索"></a>为了解决今天上报Bugly的问题，我还得继续探索</h4><p>搜索中…<br>搜索中…<br>搜索中…<br>找到方案了！</p>
+<h1 id="第三种方式"><a href="#第三种方式" class="headerlink" title="第三种方式"></a>第三种方式</h1><h4 id="函数指针方式"><a href="#函数指针方式" class="headerlink" title="函数指针方式"></a>函数指针方式</h4><p>上代码</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">id</span> target = <span class="keyword">self</span>;</span><br><span class="line">SEL selector = <span class="keyword">@selector</span>(function:count:);</span><br><span class="line"><span class="comment">// 第一个第二个参数是self和selector</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">void</span> (*function)(<span class="keyword">id</span>, SEL, <span class="built_in">NSString</span> *, <span class="keyword">int</span>);</span><br><span class="line">function methodToCall = (function)[target methodForSelector:selector];</span><br><span class="line">methodToCall(target, selector, <span class="string">@"string"</span>,<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+<p>可能有些小伙伴没有见过这种用法，我其实也是解决Bugly问题的时候才了解到的，不过看代码应该是能看懂的，首先用selector找到要调用的方法，再定义一个函数指针，指向selector选择的方法，然后调用这个函数执行，我试了下，能完美解决文章开头我遇到的问题</p>
+<h4 id="继续探索"><a href="#继续探索" class="headerlink" title="继续探索"></a>继续探索</h4><h1 id="第四种方式"><a href="#第四种方式" class="headerlink" title="第四种方式"></a>第四种方式</h1><h4 id="最底层的消息传递方式"><a href="#最底层的消息传递方式" class="headerlink" title="最底层的消息传递方式"></a>最底层的消息传递方式</h4><p>上代码</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">id</span> BuglyLogClass = (<span class="keyword">id</span>)<span class="built_in">NSClassFromString</span>(<span class="string">@"BuglyLog"</span>);</span><br><span class="line">SEL selector = <span class="keyword">@selector</span>(level:log:);</span><br><span class="line"><span class="keyword">void</span> (*logAction)(<span class="keyword">id</span>, SEL, <span class="built_in">NSUInteger</span>,<span class="built_in">NSString</span> *) = (<span class="keyword">void</span> (*)(<span class="keyword">id</span>, SEL, <span class="built_in">NSUInteger</span>,<span class="built_in">NSString</span> *))objc_msgSend;</span><br><span class="line">logAction(BuglyLogClass, selector, <span class="number">1</span>,<span class="string">@"description"</span>);</span><br></pre></td></tr></table></figure>
+<p>这是我最后使用的方法。所有target执行方法在底层都是通过<code>objc_msgSend</code>消息传递实现的，要执行的方法归根结底就是一条消息，发送给目标target，我们来看一下Apple官方的解释</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Basic Messaging Primitives</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * On some architectures, use objc_msgSend_stret for some struct return types.</span></span><br><span class="line"><span class="comment"> * On some architectures, use objc_msgSend_fpret for some float return types.</span></span><br><span class="line"><span class="comment"> * On some architectures, use objc_msgSend_fp2ret for some float return types.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * These functions must be cast to an appropriate function pointer type </span></span><br><span class="line"><span class="comment"> * before being called. </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">void</span> objc_msgSend(<span class="keyword">void</span> <span class="comment">/* id self, SEL op, ... */</span> )</span><br></pre></td></tr></table></figure>
+<p>其实performSelector的底层实现也是调用了objc_msgSend实现消息发送</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">id</span>)performSelector:(SEL)sel &#123;</span><br><span class="line">    <span class="keyword">if</span> (!sel) [<span class="keyword">self</span> doesNotRecognizeSelector:sel];</span><br><span class="line">    <span class="keyword">return</span> ((<span class="keyword">id</span>(*)(<span class="keyword">id</span>, SEL))objc_msgSend)(<span class="keyword">self</span>, sel);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>研究到这里，我已经解决了我的Bugly传参数上报日志的问题，在此期间学到了很多知识，可能有些写的不是很正确，望大牛指正。</p>
+
+                    
+                        
+
+                    
+                    
+                        <p>
+                            <a href="/2019/02/07/iOS关于动态执行方法的探索/#post-footer" class="postShorten-excerpt_link link">
+                                Kommentieren und teilen
+                            </a>
+                        </p>
+                    
+                </div>
+            
+        </div>
+        
+    </article>
+    
+    <div class="pagination-bar">
+    <ul class="pagination">
+        
+        
+        <li class="pagination-number">Seite 1 von 1</li>
+    </ul>
+</div>
+
+</section>
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2019 John Doe. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+        </div>
+        
+
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <h4 id="about-card-name">John Doe</h4>
+        
+            <div id="about-card-bio"><p>author.bio</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br>
+                <p>author.job</p>
+
+            </div>
+        
+        
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/jquery.js"></script>
+<script src="/assets/js/jquery.fancybox.js"></script>
+<script src="/assets/js/thumbs.js"></script>
+<script src="/assets/js/tranquilpeak.js"></script>
+<!--SCRIPTS END-->
+
+
+
+    </body>
+</html>
