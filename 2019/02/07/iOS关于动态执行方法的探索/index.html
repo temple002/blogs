@@ -1,4 +1,4 @@
-<!DOCTYPE html><html><head><meta name="generator" content="Hexo 3.8.0"><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title>iOS关于动态执行方法的探索 | Hexo</title><meta name="description" content="iOS关于动态执行方法的探索 - John Doe"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.ico"><link rel="stylesheet" href="/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/atom.xml" title="Hexo"><link rel="stylesheet" href="/css/font-awesome.min.css"></head><body><div class="wrap"><header><h1 class="branding"><a href="/" title="Hexo"><img class="logo-image" src="/favicon.ico" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><!--a.nav-list-link(class={active: act} href=url_for(value), target=tar)--><a class="nav-list-link" href="/" target="_self">首页</a></li><li class="nav-list-item"><!--a.nav-list-link(class={active: act} href=url_for(value), target=tar)--><a class="nav-list-link" href="/archives" target="_self">归档</a></li><li class="nav-list-item"><!--a.nav-list-link(class={active: act} href=url_for(value), target=tar)--><a class="nav-list-link" href="/tags" target="_self">标签</a></li><li class="nav-list-item"><!--a.nav-list-link(class={active: act} href=url_for(value), target=tar)--><a class="nav-list-link" href="/about" target="_self">关于</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">iOS关于动态执行方法的探索</h1><p class="post-info"><i class="fa fa-calendar">&nbsp;</i>2019-02-07&nbsp;| <i class="fa fa-tags">&nbsp;</i><a class="post-category-link" href="https://github.com/wwwuxt">coder</a>&nbsp;| <i class="fa fa-folder-o">&nbsp;</i><a class="post-category-link" href="http://wwwuxt.cc">Full Stand developer</a></p><div class="post-content"><h4 id="我为什么会写这篇文章"><a href="#我为什么会写这篇文章" class="headerlink" title="我为什么会写这篇文章"></a>我为什么会写这篇文章</h4><blockquote>
+<!DOCTYPE html><html><head><meta name="generator" content="Hexo 3.8.0"><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> iOS关于动态执行方法的探索 · Hexo</title><meta name="description" content="iOS关于动态执行方法的探索 - John Doe"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://yoursite.com/atom.xml" title="Hexo"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="http://weibo.com/sunchongsheng" target="_blank" class="nav-list-link">WEIBO</a></li><li class="nav-list-item"><a href="https://github.com/pinggod" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">iOS关于动态执行方法的探索</h1><div class="post-info">Feb 7, 2019</div><div class="post-content"><h4 id="我为什么会写这篇文章"><a href="#我为什么会写这篇文章" class="headerlink" title="我为什么会写这篇文章"></a>我为什么会写这篇文章</h4><blockquote>
 <p>今天在写Bugly上报错误的时候遇到了一个问题，由于项目使用组件化开发思想，在上报错误组件里需要知道当前是否导入了Bugly组件，如果没有Bugly组件，则不进行Bugly上报，我第一个想到了用<code>NSClassFromString</code>来判断是否存在Bugly，如果存在，再使用<code>performSelector:withObject</code>在<code>runtime</code>调用Bugly上报方法，但是Bugly输出日志的方法<code>BuglyLog level:&lt;#(BuglyLogLevel)#&gt; log:&lt;#(NSString *), ...#&gt;</code>第一个参数需要传入<code>NSUInterger</code>类型的基本数据，但是<code>performSelector:withObject</code>方法只能传入OC对象，所以我在解决问题的同时顺带研究了一下OC执行方法，消息传递的几种常见方法。</p>
 </blockquote>
 <a id="more"></a>
@@ -33,66 +33,4 @@
 <p>其实performSelector的底层实现也是调用了objc_msgSend实现消息发送</p>
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">id</span>)performSelector:(SEL)sel &#123;</span><br><span class="line">    <span class="keyword">if</span> (!sel) [<span class="keyword">self</span> doesNotRecognizeSelector:sel];</span><br><span class="line">    <span class="keyword">return</span> ((<span class="keyword">id</span>(*)(<span class="keyword">id</span>, SEL))objc_msgSend)(<span class="keyword">self</span>, sel);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>研究到这里，我已经解决了我的Bugly传参数上报日志的问题，在此期间学到了很多知识，可能有些写的不是很正确，望大牛指正。</p>
-</div></article></div><div class="article"><hr><h2>版权声明</h2>| 文章作者：<a href="http://wwwuxt.cc">wwwuxt</a><br>| 文章链接：<a href="http://yoursite.com/2019/02/07/iOS关于动态执行方法的探索/">http://yoursite.com/2019/02/07/iOS关于动态执行方法的探索/</a><br>| 许可协议：<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a><hr></div></main><footer><div class="paginator"></div><div class="clearfix"></div><div class="copyright"><p id="host_by"> <a href="/atom.xml"><i class="fa fa-rss"></i></a><span id="busuanzi_container_site_pv">&nbsp;<i class="fa fa-eye">&nbsp;</i><span id="busuanzi_value_site_pv"><i class="fa fa-spinner"></i></span> times, </span><span id="busanzi_container_site_uv">&nbsp;<i class="fa fa-user">&nbsp;</i><span id="busuanzi_value_site_uv"><i class="fa fa-spinner"></i></span> times.</span><br> &copy; 2017 - 2019 <a href="http://wwwuxt.cc">wwwuxt</a>. 
- Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> &amp; <a href="https://github.com/wwwuxt/hexo-theme-artemisX" target="_blank">ArtemisX</a>.<br></p><script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></footer></div><script>var _gaq = _gaq || [];
-_gaq.push(['_setAccount', 'UA-108353521-1']);
-_gaq.push(['_trackPageview']);
-
-(function () {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();
-console.log('Google Analytics')
-</script><script>(function(){
-    var bp = document.createElement('script');
-    var curProtocol = window.location.protocol.split(':')[0];
-    if (curProtocol === 'https'){
-        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
-    }
-    else{
-        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-    }
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(bp, s);
-    console.log('wwwuxt.cc')
-})();
-</script><script>(function(){
-    var req = GetXmlHttpObject()  
-    if (req == null) {  
-        console.log("not support AJAX!");  
-        return;  
-    }
-    req.onreadystatechange = function() {  
-        if (req.readyState === 4 && req.status === 200) {  
-            var deploy_server = req.getResponseHeader("Server");
-            console.log(deploy_server)
-            if(deploy_server === 'Coding Pages'){
-                document.getElementById('host_by').innerHTML+='Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a>.'
-            }
-            else if(deploy_server === 'GitHub.com'){
-                document.getElementById('host_by').innerHTML+='Hosted by <a href="https://pages.github.com" style="font-weight: bold">GitHub Pages</a>.'
-            }
-            else{
-                document.getElementById('host_by').innerHTML+='Hosted by <a href="#" style="font-weight: bold">'+ deploy_server + '</a>.'
-            }
-        }  
-    };  
-    req.open('GET', document.location, true);
-    req.send(null);
-})();
-function GetXmlHttpObject() {  
-    var xmlHttp = null;  
-    try {  
-        // Firefox, Opera 8.0+, Safari  
-        xmlHttp = new XMLHttpRequest();  
-    } catch (e) {  
-        // Internet Explorer  
-        try {  
-            xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");  
-        } catch (e) {  
-            xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");  
-        }  
-    }  
-    return xmlHttp;  
-}  </script></body></html>
+</div></article></div></main><footer><div class="paginator"></div><div class="copyright"><p>© 2015 - 2019 <a href="http://yoursite.com">John Doe</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>
