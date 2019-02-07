@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://yoursite.com/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:locale" content="default">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-iOS关于动态执行方法的探索" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/02/07/iOS关于动态执行方法的探索/" class="article-date">
+  <time datetime="2019-02-07T06:05:11.000Z" itemprop="datePublished">2019-02-07</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/02/07/iOS关于动态执行方法的探索/">iOS关于动态执行方法的探索</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="http://upload-images.jianshu.io/upload_images/1395346-14da93e406264b4d.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1.jpg"></p>
+<h1 id="我为什么会写这篇文章"><a href="#我为什么会写这篇文章" class="headerlink" title="我为什么会写这篇文章"></a>我为什么会写这篇文章</h1><blockquote>
+<p>今天在写Bugly上报错误的时候遇到了一个问题，由于项目使用组件化开发思想，在上报错误组件里需要知道当前是否导入了Bugly组件，如果没有Bugly组件，则不进行Bugly上报，我第一个想到了用<code>NSClassFromString</code>来判断是否存在Bugly，如果存在，再使用<code>performSelector:withObject</code>在<code>runtime</code>调用Bugly上报方法，但是Bugly输出日志的方法<code>BuglyLog level:&lt;#(BuglyLogLevel)#&gt; log:&lt;#(NSString *), ...#&gt;</code>第一个参数需要传入<code>NSUInterger</code>类型的基本数据，但是<code>performSelector:withObject</code>方法只能传入OC对象，所以我在解决问题的同时顺带研究了一下OC执行方法，消息传递的几种常见方法。</p>
+</blockquote>
+<h1 id="第一种方式"><a href="#第一种方式" class="headerlink" title="第一种方式"></a>第一种方式</h1><h4 id="performSelector方式"><a href="#performSelector方式" class="headerlink" title="performSelector方式"></a>performSelector方式</h4><p>这应该是开发过程中动态执行方法最常用的方式了吧，最常见的用法就是<code>performSelector:withObject</code>，或者可以再带一个参数<code>performSelector:withObject:withObject:</code>，就像这样调用:</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">id</span> BuglyClass = (<span class="keyword">id</span>)<span class="built_in">NSClassFromString</span>(<span class="string">@"Bugly"</span>);</span><br><span class="line"><span class="built_in">NSError</span> *error = [<span class="built_in">NSError</span> errorWithDomain:errorTitle code:<span class="number">-1</span> userInfo:@&#123;<span class="built_in">NSLocalizedDescriptionKey</span>:<span class="string">@""</span>&#125;];</span><br><span class="line">[BuglyClass performSelector:<span class="keyword">@selector</span>(reportError:) withObject:error];</span><br></pre></td></tr></table></figure>
+<p>也有延时触发的用法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">performSelector:withObject:afterDelay:</span><br></pre></td></tr></table></figure>
+<p>在某个线程中执行的用法，当然这些不是本文讨论的重点，所以一笔带过</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">- (void)performSelectorInBackground:(SEL)aSelector withObject:(id)arg</span><br><span class="line">- (void)performSelectorOnMainThread:(SEL)aSelector withObject:(id)arg waitUntilDone:(BOOL)wait modes:(NSArray *)array;</span><br><span class="line">- (void)performSelector:(SEL)aSelector onThread:(NSThread *)thr withObject:(id)arg waitUntilDone:(BOOL)wait modes:(NSArray *)array;</span><br></pre></td></tr></table></figure>
+<h5 id="其实不难发现performSelector方式有一些弊端"><a href="#其实不难发现performSelector方式有一些弊端" class="headerlink" title="其实不难发现performSelector方式有一些弊端"></a>其实不难发现performSelector方式有一些弊端</h5><blockquote>
+<p>   1.不能传超过三个参数<br>   2.参数只能为OC对象</p>
+</blockquote>
+<h1 id="第二种方式"><a href="#第二种方式" class="headerlink" title="第二种方式"></a>第二种方式</h1><h4 id="NSInvocation方式"><a href="#NSInvocation方式" class="headerlink" title="NSInvocation方式"></a>NSInvocation方式</h4><p>先不说啥，直接上代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">NSString *string = @&quot;test&quot;;</span><br><span class="line">NSNumber *number = [NSNumber numberWithInt:1];</span><br><span class="line"></span><br><span class="line">SEL selector = @selector(function2:count:);</span><br><span class="line">NSMethodSignature *signature = [self methodSignatureForSelector:selector];</span><br><span class="line">NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:signature];</span><br><span class="line"></span><br><span class="line">invocation.target = self;</span><br><span class="line">invocation.selector = selector;</span><br><span class="line">// 第一和第二个参数是target和selector</span><br><span class="line">[invocation setArgument:&amp;string atIndex:2];</span><br><span class="line">[invocation setArgument:&amp;number atIndex:3];</span><br><span class="line">//执行</span><br><span class="line">[invocation invoke];</span><br></pre></td></tr></table></figure>
+<blockquote>
+<ul>
+<li><code>NSMethodSignature</code>: 方法签名，如果方法不存在或者参数对不上，会直接crach，其实我也不是很理解这个签名的意思，可能是代码写得不够多吧，按照我的理解，这个数字签名就像是找一下这个target里面是否有这个方法，参数是否正确，如果都对，则签名生效，否则就可能奔溃</li>
+<li><code>NSInvocation</code>: 包装了一次消息传递的所有内容，包括target，select，argument等等，会在运行时找到目标发送消息</li>
+<li>注意这里传的参数是地址，所以还不不满足我们的需求</li>
+</ul>
+</blockquote>
+<h4 id="为了解决今天上报Bugly的问题，我还得继续探索"><a href="#为了解决今天上报Bugly的问题，我还得继续探索" class="headerlink" title="为了解决今天上报Bugly的问题，我还得继续探索"></a>为了解决今天上报Bugly的问题，我还得继续探索</h4><p>搜索中…<br>搜索中…<br>搜索中…<br>找到方案了！</p>
+<h1 id="第三种方式"><a href="#第三种方式" class="headerlink" title="第三种方式"></a>第三种方式</h1><h4 id="函数指针方式"><a href="#函数指针方式" class="headerlink" title="函数指针方式"></a>函数指针方式</h4><p>上代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">id target = self;</span><br><span class="line">SEL selector = @selector(function:count:);</span><br><span class="line">// 第一个第二个参数是self和selector</span><br><span class="line">typedef void (*function)(id, SEL, NSString *, int);</span><br><span class="line">function methodToCall = (function)[target methodForSelector:selector];</span><br><span class="line">methodToCall(target, selector, @&quot;string&quot;,1);</span><br></pre></td></tr></table></figure>
+<p>可能有些小伙伴没有见过这种用法，我其实也是解决Bugly问题的时候才了解到的，不过看代码应该是能看懂的，首先用selector找到要调用的方法，再定义一个函数指针，指向selector选择的方法，然后调用这个函数执行，我试了下，能完美解决文章开头我遇到的问题</p>
+<h4 id="继续探索"><a href="#继续探索" class="headerlink" title="继续探索"></a>继续探索</h4><h1 id="第四种方式"><a href="#第四种方式" class="headerlink" title="第四种方式"></a>第四种方式</h1><h4 id="最底层的消息传递方式"><a href="#最底层的消息传递方式" class="headerlink" title="最底层的消息传递方式"></a>最底层的消息传递方式</h4><p>上代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">id BuglyLogClass = (id)NSClassFromString(@&quot;BuglyLog&quot;);</span><br><span class="line">SEL selector = @selector(level:log:);</span><br><span class="line">void (*logAction)(id, SEL, NSUInteger,NSString *) = (void (*)(id, SEL, NSUInteger,NSString *))objc_msgSend;</span><br><span class="line">logAction(BuglyLogClass, selector, 1,@&quot;description&quot;);</span><br></pre></td></tr></table></figure>
+<p>这是我最后使用的方法。所有target执行方法在底层都是通过<code>objc_msgSend</code>消息传递实现的，要执行的方法归根结底就是一条消息，发送给目标target，我们来看一下Apple官方的解释</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">/* Basic Messaging Primitives</span><br><span class="line"> *</span><br><span class="line"> * On some architectures, use objc_msgSend_stret for some struct return types.</span><br><span class="line"> * On some architectures, use objc_msgSend_fpret for some float return types.</span><br><span class="line"> * On some architectures, use objc_msgSend_fp2ret for some float return types.</span><br><span class="line"> *</span><br><span class="line"> * These functions must be cast to an appropriate function pointer type </span><br><span class="line"> * before being called. </span><br><span class="line"> */</span><br><span class="line">void objc_msgSend(void /* id self, SEL op, ... */ )</span><br></pre></td></tr></table></figure>
+<p>其实performSelector的底层实现也是调用了objc_msgSend实现消息发送</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- (id)performSelector:(SEL)sel &#123;</span><br><span class="line">    if (!sel) [self doesNotRecognizeSelector:sel];</span><br><span class="line">    return ((id(*)(id, SEL))objc_msgSend)(self, sel);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>研究到这里，我已经解决了我的Bugly传参数上报日志的问题，在此期间学到了很多知识，可能有些写的不是很正确，望大牛指正。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/02/07/iOS关于动态执行方法的探索/" data-id="cjru89rt40000egse0j06nbfa" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/02/07/iOS关于动态执行方法的探索/">iOS关于动态执行方法的探索</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
